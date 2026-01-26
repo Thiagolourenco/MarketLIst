@@ -1,10 +1,11 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import { TouchableOpacity, StyleSheet, ViewStyle, TextStyle } from 'react-native';
+import { Typography } from './Typography';
 
 interface ButtonProps {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'outline';
+  variant?: 'primary' | 'secondary' | 'skip';
   disabled?: boolean;
   style?: ViewStyle;
   textStyle?: TextStyle;
@@ -28,47 +29,48 @@ export function Button({
       ]}
       onPress={onPress}
       disabled={disabled}
+      activeOpacity={0.8}
     >
-      <Text style={[styles.text, styles[`${variant}Text`], textStyle]}>
+      <Typography
+        variant={variant === 'primary' ? 'button-primary' : 'button-secondary'}
+        style={textStyle}
+      >
         {title}
-      </Text>
+      </Typography>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    alignItems: 'center',
+    flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
+    padding: 0,
+    width: '100%',
+    maxWidth: 323,
+    height: 56,
+    alignSelf: 'stretch',
   },
   primary: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#34C759',
+    borderRadius: 16,
+    shadowColor: '#34C759',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 8,
   },
   secondary: {
-    backgroundColor: '#5856D6',
-  },
-  outline: {
     backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: '#007AFF',
+  },
+  skip: {
+    backgroundColor: 'transparent',
   },
   disabled: {
     opacity: 0.5,
-  },
-  text: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  primaryText: {
-    color: '#FFFFFF',
-  },
-  secondaryText: {
-    color: '#FFFFFF',
-  },
-  outlineText: {
-    color: '#007AFF',
   },
 });

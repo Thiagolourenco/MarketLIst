@@ -5,7 +5,7 @@ export function useAuthVM() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
     setError(null);
 
@@ -16,8 +16,10 @@ export function useAuthVM() {
       });
 
       if (error) throw error;
+      return true;
     } catch (err: any) {
       setError(err.message);
+      return false;
     } finally {
       setIsLoading(false);
     }

@@ -1,21 +1,5 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { SignUpView } from '@/features/auth/view';
 
 export default function SignUpScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
-    </View>
-  );
+  return <SignUpView />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-});
