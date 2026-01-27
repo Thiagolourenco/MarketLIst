@@ -1,21 +1,5 @@
-import { StyleSheet, View, Text } from 'react-native';
+import { PaywallView } from '@/features/subscriptions/view';
 
 export default function PaywallScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Paywall</Text>
-    </View>
-  );
+  return <PaywallView />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-});

@@ -1,29 +1,29 @@
-import { useLocalSearchParams } from 'expo-router';
-import { StyleSheet, View, Text } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { RecipeDetailsView } from '@/src/features/recipes/view/RecipeDetailsView';
 
 export default function RecipeScreen() {
   const { recipeId } = useLocalSearchParams<{ recipeId: string }>();
+  const router = useRouter();
+
+  const handleBack = () => {
+    router.back();
+  };
+
+  const handleFavorite = () => {
+    // TODO: Implement favorite logic
+    console.log('Favorite toggled for recipe:', recipeId);
+  };
+
+  const handleStartCooking = () => {
+    // TODO: Navigate to cooking mode
+    console.log('Start cooking mode for recipe:', recipeId);
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Recipe</Text>
-      <Text style={styles.subtitle}>Recipe ID: {recipeId}</Text>
-    </View>
+    <RecipeDetailsView
+      onBack={handleBack}
+      onFavorite={handleFavorite}
+      onStartCooking={handleStartCooking}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  subtitle: {
-    fontSize: 16,
-    marginTop: 10,
-  },
-});

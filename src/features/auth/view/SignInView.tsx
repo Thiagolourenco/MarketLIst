@@ -154,7 +154,7 @@ export function SignInView() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#FAFAF9",
     paddingTop: 60,
   },
   scrollContent: {

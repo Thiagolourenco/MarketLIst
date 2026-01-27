@@ -173,7 +173,7 @@ export function SignUpView() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FAFAF9',
   },
   scrollContent: {
     flexGrow: 1,

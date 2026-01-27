@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 
 export function redirectToHome() {
-  router.replace('/(app)');
+  router.replace('/(app)/index');
 }
 
 export function redirectToSignIn() {

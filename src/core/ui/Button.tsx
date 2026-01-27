@@ -5,7 +5,7 @@ import { Typography } from './Typography';
 interface ButtonProps {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'skip';
+  variant?: 'primary' | 'secondary' | 'skip' | 'cta';
   disabled?: boolean;
   style?: ViewStyle;
   textStyle?: TextStyle;
@@ -32,8 +32,15 @@ export function Button({
       activeOpacity={0.8}
     >
       <Typography
-        variant={variant === 'primary' ? 'button-primary' : 'button-secondary'}
-        style={textStyle}
+        variant={
+          variant === 'primary' || variant === 'cta'
+            ? 'button-primary'
+            : 'button-secondary'
+        }
+        style={[
+          variant === 'cta' && styles.ctaText,
+          textStyle,
+        ]}
       >
         {title}
       </Typography>
@@ -70,7 +77,21 @@ const styles = StyleSheet.create({
   skip: {
     backgroundColor: 'transparent',
   },
+  cta: {
+    backgroundColor: '#FFB020',
+    borderRadius: 12,
+    height: 60,
+    paddingVertical: 16,
+    maxWidth: 345,
+  },
   disabled: {
     opacity: 0.5,
+  },
+  ctaText: {
+    fontFamily: 'Inter',
+    fontWeight: '700',
+    fontSize: 18,
+    lineHeight: 28,
+    color: '#FFFFFF',
   },
 });
