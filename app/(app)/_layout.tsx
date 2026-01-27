@@ -11,7 +11,13 @@ export default function AppLayout() {
       <Stack.Screen name="week" />
       <Stack.Screen name="list" />
       <Stack.Screen name="recipe" />
-      <Stack.Screen name="paywall" />
+      <Stack.Screen 
+        name="paywall" 
+        options={{ 
+          headerShown: false,
+          presentation: 'card',
+        }} 
+      />
       <Stack.Screen name="settings" />
     </Stack>
   );
