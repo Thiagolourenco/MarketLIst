@@ -1,17 +1,23 @@
-import { useEffect, useState } from 'react';
-import { Session } from '@supabase/supabase-js';
-import { supabase } from '@/core/lib/supabase';
+import { supabase } from "@/core/lib/supabase";
+import { Session } from "@supabase/supabase-js";
+import { useEffect, useState } from "react";
 
 export function useSession() {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setIsLoading(false);
-    });
+    // Get initial session (trata erro de rede para não travar o app)
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        setSession(session);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setSession(null);
+        setIsLoading(false);
+      });
 
     // Listen for auth changes
     const {

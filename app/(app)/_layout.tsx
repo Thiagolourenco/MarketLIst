@@ -1,5 +1,5 @@
-import { Stack } from "expo-router";
 import { AppScreenWrapper } from "@/src/core/ui/AppScreenWrapper";
+import { Stack } from "expo-router";
 
 export default function AppLayout() {
   return (

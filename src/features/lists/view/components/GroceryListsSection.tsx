@@ -1,12 +1,12 @@
-import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { GroceryListCard } from '@/src/shared/components';
+import { GroceryListCard } from "@/src/shared/components";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface GroceryList {
   id: string;
   title: string;
   subtitle: string;
-  status: 'active' | 'done';
+  status: "active" | "done";
   progress: number;
   total: number;
 }
@@ -25,18 +25,18 @@ export function GroceryListsSection({
   // Mock data for now - will be replaced with real data
   const defaultLists: GroceryList[] = [
     {
-      id: '1',
+      id: "1",
       title: "This Week's Shopping",
-      subtitle: 'Created Oct 26',
-      status: 'active',
+      subtitle: "Created Oct 26",
+      status: "active",
       progress: 12,
       total: 16,
     },
     {
-      id: '2',
-      title: 'Thanksgiving Prep',
-      subtitle: 'Created Oct 19',
-      status: 'done',
+      id: "2",
+      title: "Thanksgiving Prep",
+      subtitle: "Created Oct 19",
+      status: "done",
       progress: 25,
       total: 25,
     },
@@ -76,31 +76,31 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 16,
   },
   title: {
     width: 116.06,
     height: 28,
-    fontFamily: 'Liberation Sans',
-    fontStyle: 'normal',
-    fontWeight: '700',
+    fontFamily: "Liberation Sans",
+    fontStyle: "normal",
+    fontWeight: "700",
     fontSize: 18,
     lineHeight: 28,
-    color: '#1F2925',
+    color: "#1F2925",
   },
   viewAllButton: {
     width: 41.81,
     height: 16,
-    fontFamily: 'Liberation Sans',
-    fontStyle: 'normal',
-    fontWeight: '500',
+    fontFamily: "Liberation Sans",
+    fontStyle: "normal",
+    fontWeight: "500",
     fontSize: 12,
     lineHeight: 16,
-    textAlign: 'center',
-    color: '#5A756E',
+    textAlign: "center",
+    color: "#5A756E",
   },
   listsContainer: {
     gap: 12,

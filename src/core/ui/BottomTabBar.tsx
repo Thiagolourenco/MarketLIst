@@ -22,62 +22,64 @@ interface AnimatedTabItemProps {
   opacity: ReturnType<typeof useSharedValue<number>>;
 }
 
-const AnimatedTabItem = React.memo(({ route, isActive, onPress, scale, opacity }: AnimatedTabItemProps) => {
-  const getIcon = (isActive: boolean) => {
-    const color = isActive ? "#FFFFFF" : "#6B7280";
-    switch (route) {
-      case "home":
-        return <HomeIcon width={20} height={20} color={color} />;
-      case "list":
-        return <ListIcon width={20} height={20} color={color} />;
-      case "calendar":
-        return <CalendarIcon width={20} height={20} color={color} />;
-      case "profile":
-        return <ProfileIcon width={20} height={20} color={color} />;
-    }
-  };
-
-  const activeTabStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: scale.value }],
-      opacity: opacity.value,
+const AnimatedTabItem = React.memo(
+  ({ route, isActive, onPress, scale, opacity }: AnimatedTabItemProps) => {
+    const getIcon = (isActive: boolean) => {
+      const color = isActive ? "#FFFFFF" : "#6B7280";
+      switch (route) {
+        case "home":
+          return <HomeIcon width={20} height={20} color={color} />;
+        case "list":
+          return <ListIcon width={20} height={20} color={color} />;
+        case "calendar":
+          return <CalendarIcon width={20} height={20} color={color} />;
+        case "profile":
+          return <ProfileIcon width={20} height={20} color={color} />;
+      }
     };
-  });
 
-  const inactiveTabStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ scale: scale.value }],
-      opacity: 1 - opacity.value,
-    };
-  });
+    const activeTabStyle = useAnimatedStyle(() => {
+      return {
+        transform: [{ scale: scale.value }],
+        opacity: opacity.value,
+      };
+    });
 
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      activeOpacity={0.7}
-      style={styles.tabButton}
-    >
-      <Animated.View
-        style={[
-          styles.activeTab,
-          activeTabStyle,
-          { position: isActive ? "relative" : "absolute" },
-        ]}
+    const inactiveTabStyle = useAnimatedStyle(() => {
+      return {
+        transform: [{ scale: scale.value }],
+        opacity: 1 - opacity.value,
+      };
+    });
+
+    return (
+      <TouchableOpacity
+        onPress={onPress}
+        activeOpacity={0.7}
+        style={styles.tabButton}
       >
-        {getIcon(true)}
-      </Animated.View>
-      <Animated.View
-        style={[
-          styles.inactiveTab,
-          inactiveTabStyle,
-          { position: isActive ? "absolute" : "relative" },
-        ]}
-      >
-        {getIcon(false)}
-      </Animated.View>
-    </TouchableOpacity>
-  );
-});
+        <Animated.View
+          style={[
+            styles.activeTab,
+            activeTabStyle,
+            { position: isActive ? "relative" : "absolute" },
+          ]}
+        >
+          {getIcon(true)}
+        </Animated.View>
+        <Animated.View
+          style={[
+            styles.inactiveTab,
+            inactiveTabStyle,
+            { position: isActive ? "absolute" : "relative" },
+          ]}
+        >
+          {getIcon(false)}
+        </Animated.View>
+      </TouchableOpacity>
+    );
+  },
+);
 
 AnimatedTabItem.displayName = "AnimatedTabItem";
 
@@ -110,32 +112,74 @@ export function BottomTabBar({
       stiffness: 150,
     };
 
-    homeScale.value = withSpring(activeRoute === "home" ? 1 : 0.8, springConfig);
-    listScale.value = withSpring(activeRoute === "list" ? 1 : 0.8, springConfig);
-    calendarScale.value = withSpring(activeRoute === "calendar" ? 1 : 0.8, springConfig);
-    profileScale.value = withSpring(activeRoute === "profile" ? 1 : 0.8, springConfig);
+    homeScale.value = withSpring(
+      activeRoute === "home" ? 1 : 0.8,
+      springConfig,
+    );
+    listScale.value = withSpring(
+      activeRoute === "list" ? 1 : 0.8,
+      springConfig,
+    );
+    calendarScale.value = withSpring(
+      activeRoute === "calendar" ? 1 : 0.8,
+      springConfig,
+    );
+    profileScale.value = withSpring(
+      activeRoute === "profile" ? 1 : 0.8,
+      springConfig,
+    );
 
-    homeOpacity.value = withSpring(activeRoute === "home" ? 1 : 0, springConfig);
-    listOpacity.value = withSpring(activeRoute === "list" ? 1 : 0, springConfig);
-    calendarOpacity.value = withSpring(activeRoute === "calendar" ? 1 : 0, springConfig);
-    profileOpacity.value = withSpring(activeRoute === "profile" ? 1 : 0, springConfig);
-  }, [activeRoute, homeScale, listScale, calendarScale, profileScale, homeOpacity, listOpacity, calendarOpacity, profileOpacity]);
+    homeOpacity.value = withSpring(
+      activeRoute === "home" ? 1 : 0,
+      springConfig,
+    );
+    listOpacity.value = withSpring(
+      activeRoute === "list" ? 1 : 0,
+      springConfig,
+    );
+    calendarOpacity.value = withSpring(
+      activeRoute === "calendar" ? 1 : 0,
+      springConfig,
+    );
+    profileOpacity.value = withSpring(
+      activeRoute === "profile" ? 1 : 0,
+      springConfig,
+    );
+  }, [
+    activeRoute,
+    homeScale,
+    listScale,
+    calendarScale,
+    profileScale,
+    homeOpacity,
+    listOpacity,
+    calendarOpacity,
+    profileOpacity,
+  ]);
 
   const getScale = (route: TabRoute) => {
     switch (route) {
-      case "home": return homeScale;
-      case "list": return listScale;
-      case "calendar": return calendarScale;
-      case "profile": return profileScale;
+      case "home":
+        return homeScale;
+      case "list":
+        return listScale;
+      case "calendar":
+        return calendarScale;
+      case "profile":
+        return profileScale;
     }
   };
 
   const getOpacity = (route: TabRoute) => {
     switch (route) {
-      case "home": return homeOpacity;
-      case "list": return listOpacity;
-      case "calendar": return calendarOpacity;
-      case "profile": return profileOpacity;
+      case "home":
+        return homeOpacity;
+      case "list":
+        return listOpacity;
+      case "calendar":
+        return calendarOpacity;
+      case "profile":
+        return profileOpacity;
     }
   };
 
