@@ -1,3 +1,4 @@
+import { useToast } from "@/core/context/ToastContext";
 import { Button, Input, Typography } from "@/src/core/ui";
 import {
   AppleIcon,
@@ -24,13 +25,17 @@ export function SignInView() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { signIn, isLoading, error } = useAuthVM();
+  const toast = useToast();
 
   const handleSignIn = async () => {
-    // const success = await signIn(email, password);
-    // Navigate to onboarding after successful login
-    // if (success) {
-    router.push("/(auth)/onboarding");
-    // }
+    const result = await signIn(email, password);
+    if (result.success) {
+      toast.success("Login realizado com sucesso!");
+      setTimeout(() => router.replace("/(app)/home"), 500);
+    } else if (result.error) {
+      console.log("result.error", result.error);
+      toast.error(result.error);
+    }
   };
 
   return (
@@ -69,7 +74,7 @@ export function SignInView() {
               autoCapitalize="none"
               autoComplete="email"
               leftIcon={<EmailIcon />}
-              error={error && error.includes("email") ? error : undefined}
+              error={error?.toLowerCase().includes("email") ? error : undefined}
             />
 
             <Input
@@ -83,7 +88,12 @@ export function SignInView() {
               leftIcon={<LockIcon />}
               rightIcon={<EyeIcon />}
               onRightIconPress={() => setShowPassword(!showPassword)}
-              error={error && error.includes("password") ? error : undefined}
+              error={
+                error?.toLowerCase().includes("senha") ||
+                error?.toLowerCase().includes("password")
+                  ? error
+                  : undefined
+              }
             />
 
             {/* Forgot Password Link */}
@@ -103,6 +113,7 @@ export function SignInView() {
             title="Log In"
             onPress={handleSignIn}
             disabled={isLoading || !email || !password}
+            activeIndicator={isLoading}
             style={styles.loginButton}
           />
 
@@ -154,7 +165,7 @@ export function SignInView() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#FAFAF9",
     paddingTop: 60,
   },
   scrollContent: {

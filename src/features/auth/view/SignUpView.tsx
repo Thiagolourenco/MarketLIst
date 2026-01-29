@@ -1,36 +1,64 @@
-import React, { useState } from 'react';
+import { useToast } from "@/core/context/ToastContext";
+import { Button, Input, Typography } from "@/core/ui";
 import {
-  StyleSheet,
-  View,
-  ScrollView,
-  TouchableOpacity,
+  AppleIcon,
+  ChefHatIcon,
+  EmailIcon,
+  EyeIcon,
+  GoogleIcon,
+  LockIcon,
+  ProfileIcon,
+} from "@/core/ui/icons";
+import { router } from "expo-router";
+import React, { useState } from "react";
+import {
   KeyboardAvoidingView,
   Platform,
-} from 'react-native';
-import { router } from 'expo-router';
-import { Button, Input, Typography } from '@/core/ui';
-import { EmailIcon, LockIcon, EyeIcon, ChefHatIcon, GoogleIcon, AppleIcon } from '@/core/ui/icons';
-import { useAuthVM } from '../view-model/useAuthVM';
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { useAuthVM } from "../view-model/useAuthVM";
 
 export function SignUpView() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { signUp, isLoading, error } = useAuthVM();
+  const [localError, setLocalError] = useState<string | null>(null);
+  const toast = useToast();
 
   const handleSignUp = async () => {
-    if (password !== confirmPassword) {
-      return;
+    try {
+      if (password !== confirmPassword) {
+        const msg = "As senhas não coincidem.";
+        setLocalError(msg);
+        toast.error(msg);
+        return;
+      }
+      setLocalError(null);
+      const result = await signUp(name, email, password);
+      if (result.success) {
+        toast.success("Conta criada com sucesso!");
+        router.replace("/");
+      } else if (result.error) {
+        toast.error(result.error);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+      console.error(error);
+    } finally {
+      // setIsLoading(false);
     }
-    await signUp(email, password);
-    // Navigation will be handled by auth state changes
   };
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
       <ScrollView
@@ -67,6 +95,25 @@ export function SignUpView() {
           {/* Input Fields */}
           <View style={styles.inputsContainer}>
             <Input
+              label="Full Name"
+              placeholder="John Doe"
+              value={name}
+              onChangeText={setName}
+              autoCapitalize="words"
+              autoComplete="name"
+              leftIcon={<ProfileIcon />}
+              error={
+                error?.toLowerCase().includes("nome") ||
+                error?.toLowerCase().includes("name")
+                  ? error
+                  : localError?.toLowerCase().includes("nome") ||
+                      localError?.toLowerCase().includes("name")
+                    ? localError
+                    : undefined
+              }
+            />
+
+            <Input
               label="Email Address"
               placeholder="hello@example.com"
               value={email}
@@ -75,7 +122,13 @@ export function SignUpView() {
               autoCapitalize="none"
               autoComplete="email"
               leftIcon={<EmailIcon />}
-              error={error && error.includes('email') ? error : undefined}
+              error={
+                error?.toLowerCase().includes("email")
+                  ? error
+                  : localError?.toLowerCase().includes("email")
+                    ? localError
+                    : undefined
+              }
             />
 
             <Input
@@ -89,7 +142,15 @@ export function SignUpView() {
               leftIcon={<LockIcon />}
               rightIcon={<EyeIcon />}
               onRightIconPress={() => setShowPassword(!showPassword)}
-              error={error && error.includes('password') ? error : undefined}
+              error={
+                error?.toLowerCase().includes("senha") ||
+                error?.toLowerCase().includes("password")
+                  ? error
+                  : localError?.toLowerCase().includes("senha") ||
+                      localError?.toLowerCase().includes("password")
+                    ? localError
+                    : undefined
+              }
             />
 
             <Input
@@ -102,10 +163,12 @@ export function SignUpView() {
               autoComplete="password-new"
               leftIcon={<LockIcon />}
               rightIcon={<EyeIcon />}
-              onRightIconPress={() => setShowConfirmPassword(!showConfirmPassword)}
+              onRightIconPress={() =>
+                setShowConfirmPassword(!showConfirmPassword)
+              }
               error={
                 confirmPassword && password !== confirmPassword
-                  ? 'Passwords do not match'
+                  ? "Passwords do not match"
                   : undefined
               }
             />
@@ -117,11 +180,13 @@ export function SignUpView() {
             onPress={handleSignUp}
             disabled={
               isLoading ||
+              !name ||
               !email ||
               !password ||
               !confirmPassword ||
               password !== confirmPassword
             }
+            activeIndicator={isLoading}
             style={styles.signUpButton}
           />
 
@@ -153,10 +218,10 @@ export function SignUpView() {
           {/* Sign In Link */}
           <View style={styles.signInContainer}>
             <Typography variant="caption" style={styles.signInText}>
-              Already have an account?{' '}
+              Already have an account?{" "}
             </Typography>
             <TouchableOpacity
-              onPress={() => router.push('/(auth)/sign-in')}
+              onPress={() => router.push("/(auth)/sign-in")}
               activeOpacity={0.7}
             >
               <Typography variant="caption" style={styles.signInLink}>
@@ -173,26 +238,26 @@ export function SignUpView() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FAFAF9",
   },
   scrollContent: {
     flexGrow: 1,
   },
   content: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     paddingHorizontal: 32,
     paddingTop: 60,
     paddingBottom: 40,
   },
   backButton: {
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     marginBottom: 20,
     padding: 8,
   },
   backArrow: {
     fontSize: 24,
-    color: '#6B7280',
+    color: "#6B7280",
   },
   iconContainer: {
     marginBottom: 24,
@@ -201,89 +266,89 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 16,
-    backgroundColor: '#F0FDF4',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#F0FDF4",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 0,
   },
   welcomeTitle: {
     marginBottom: 8,
-    textAlign: 'center',
+    textAlign: "center",
   },
   subtitle: {
     marginBottom: 32,
-    textAlign: 'center',
-    color: '#6B7280',
+    textAlign: "center",
+    color: "#6B7280",
   },
   inputsContainer: {
-    width: '100%',
+    width: "100%",
     marginBottom: 24,
   },
   signUpButton: {
-    width: '100%',
+    width: "100%",
     marginBottom: 24,
   },
   socialSection: {
-    width: '100%',
+    width: "100%",
     marginBottom: 32,
   },
   orContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 16,
-    width: '100%',
+    width: "100%",
   },
   orLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#E5E7EB',
+    backgroundColor: "#E5E7EB",
   },
   orText: {
-    textAlign: 'center',
-    color: '#6B7280',
+    textAlign: "center",
+    color: "#6B7280",
     paddingHorizontal: 12,
     fontSize: 14,
     lineHeight: 20,
   },
   socialButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     gap: 12,
   },
   socialButton: {
     width: 156.5,
     height: 50.61,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 14.06,
     paddingHorizontal: 40.69,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: "#E5E7EB",
     borderRadius: 12,
     gap: 8,
   },
   socialButtonLabel: {
     fontSize: 14,
     lineHeight: 20,
-    color: '#374151',
-    fontWeight: '500',
-    fontFamily: 'Nimbus Sans',
-    textAlign: 'center',
+    color: "#374151",
+    fontWeight: "500",
+    fontFamily: "Nimbus Sans",
+    textAlign: "center",
   },
   signInContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   signInText: {
-    color: '#6B7280',
+    color: "#6B7280",
   },
   signInLink: {
-    color: '#34C759',
-    fontWeight: '600',
+    color: "#34C759",
+    fontWeight: "600",
   },
 });

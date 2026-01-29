@@ -124,8 +124,8 @@ export function OnboardingView() {
       });
       setCurrentIndex(nextIndex);
     } else {
-      // Navigate to sign-in or home
-      router.replace("/(auth)/sign-in");
+      // Navigate to paywall after "Get Started"
+      router.push("/(app)/paywall");
     }
   };
 
@@ -261,7 +261,7 @@ export function OnboardingView() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#FAFAF9",
   },
   scrollView: {
     flex: 1,

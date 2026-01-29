@@ -1,5 +1,14 @@
-import { Redirect } from 'expo-router';
+import { useSession } from "@/core/hooks/useSession";
+import { Redirect } from "expo-router";
 
 export default function Index() {
-  return <Redirect href="/(auth)/sign-in" />;
+  const { session, isLoading } = useSession();
+
+  if (isLoading) return null;
+
+  return session ? (
+    <Redirect href="/(app)/home" />
+  ) : (
+    <Redirect href="/(auth)/sign-in" />
+  );
 }
